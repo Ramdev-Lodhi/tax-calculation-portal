@@ -1,20 +1,24 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
+import app from "./app.js";
 
-const app = express();
 const PORT = process.env.PORT || 5000;
+const server = app.listen(PORT);
 
-// Middleware
-app.use(express.json());
-app.use(cors());
+(async () => {
+  try {
+    console.log("Application Started", {
+      meta: {
+        PORT: process.env.PORT,
+        SERVER_URL: process.env.SERVER_URL,
+      },
+    });
+  } catch (err) {
+    console.error("Application Error", { meta: err });
+    server.close((error) => {
+      if (error) {
+        console.error("Application Error", { meta: err });
+      }
 
-// Sample API Route
-app.get("/", (req, res) => {
-  res.send("🚀 Tax Calculation Backend Running!");
-});
-
-// Server Start
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+      process.exit(1);
+    });
+  }
+})();
