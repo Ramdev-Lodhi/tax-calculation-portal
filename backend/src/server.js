@@ -1,5 +1,5 @@
 import app from "./app.js";
-
+import database from "./config/db.js";
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
 
@@ -9,6 +9,13 @@ const server = app.listen(PORT);
       meta: {
         PORT: process.env.PORT,
         SERVER_URL: process.env.SERVER_URL,
+      },
+    });
+    const connection = await database.connectDB();
+
+    console.log("DATABASE CONNECTION", {
+      meta: {
+        CONNECTION_NAME: connection.name,
       },
     });
   } catch (err) {
