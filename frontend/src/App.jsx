@@ -1,9 +1,13 @@
+import Navbar from "./components/navbar";
 import Home from "./pages/Home";
 
 const App = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <Home />
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+      <Navbar />
+      <div className="w-full max-w-6xl px-4 pt-16">
+        <Home />
+      </div>
     </div>
   );
 };

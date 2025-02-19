@@ -1,63 +1,50 @@
-import { useState } from "react";
-import InputField from "../components/InputField";
-import TaxResult from "../components/TaxResult";
-import { calculateTax } from "../services/api";
+import { useState, useEffect } from "react";
+import TaxForm from "../components/TaxForm";
+import SummaryCard from "../components/SummaryCard";
+import TaxHistory from "../components/TaxHistory";
+import { fetchTaxHistory } from "../services/api";
 
 const Home = () => {
+  const [history, setHistory] = useState([]);
   const [formData, setFormData] = useState({
     annualIncome: "",
     investments: "",
     deductions: "",
     otherSources: "",
   });
+
   const [result, setResult] = useState(null);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    const getHistory = async () => {
+      try {
+        const data = await fetchTaxHistory();
+        setHistory(data);
+      } catch (error) {
+        console.error("Error loading history:", error);
+      }
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = calculateTax(formData);
-      setResult(response.data);
-    } catch (error) {
-      console.error("Error calculating tax:", error);
-    }
-  };
+    getHistory();
+  }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-      <h2 className="text-2xl font-bold text-center mb-4">Tax Calculator</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <InputField
-          label="Annual Income"
-          name="annualIncome"
-          onChange={handleChange}
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center">
+      <div className="max-w-6xl w-full px-4 flex flex-col md:flex-row gap-8 justify-center">
+        {/* Tax Form */}
+        <TaxForm
+          setHistory={setHistory}
+          setResult={setResult}
+          setFormData={setFormData}
+          formData={formData}
         />
-        <InputField
-          label="Investments (80C, 80D, etc.)"
-          name="investments"
-          onChange={handleChange}
-        />
-        <InputField
-          label="Other Deductions (HRA, LTA, etc.)"
-          name="deductions"
-          onChange={handleChange}
-        />
-        <InputField
-          label="Income from Other Sources"
-          name="otherSources"
-          onChange={handleChange}
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-        >
-          Calculate Tax
-        </button>
-      </form>
-      {result && <TaxResult result={result} />}
+
+        {/* Summary Card (Real-Time Data) */}
+        <SummaryCard formData={formData} result={result} />
+      </div>
+
+      {/* Tax History Table */}
+      <TaxHistory history={history} />
     </div>
   );
 };
