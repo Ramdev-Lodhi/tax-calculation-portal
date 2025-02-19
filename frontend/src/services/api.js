@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/tax";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+console.log("API URL:", API_URL);
 
 // Tax Calculation API Call
 export const calculateTax = async (data) => {
