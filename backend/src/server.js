@@ -21,6 +21,7 @@ const server = app.listen(PORT, () => {
     console.log("DATABASE CONNECTED:", {
       meta: { CONNECTION_NAME: connection.name },
     });
+    
   } catch (err) {
     console.error("Application Error", { meta: err });
     server.close(() => {

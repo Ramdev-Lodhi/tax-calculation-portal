@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import router from "./routes/index.js"; // Ensure correct route import
-import database from "./config/db.js"; // Ensure database connection import
+import router from "./routes/index.js"; 
+import database from "./config/db.js";
 
 dotenv.config();
 
