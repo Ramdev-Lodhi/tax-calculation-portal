@@ -1,20 +1,21 @@
-//app.js
-import router from './routes/index.js';
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-// import bodyParser from "body-parser";
-
+import router from "./routes/index.js"; // Ensure correct route import
+import database from "./config/db.js"; // Ensure database connection import
 
 dotenv.config();
-// connectDB();
+
 const app = express();
 
 // Middleware
-app.use(express.json());
-app.use(cors());
+// app.use(cors());
+app.use(cors({ origin: "*" }));
 
-//Routers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
 app.use("/api", router);
 
 export default app;
